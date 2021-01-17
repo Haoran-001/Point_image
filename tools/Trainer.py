@@ -96,7 +96,7 @@ class ModelNetTrainer(object):
                 list_diag = np.diag(cm)
                 list_raw_sum = np.sum(cm, axis=1)
                 val_each_acc = np.nan_to_num(truediv(list_diag, list_raw_sum))
-                # print('val each acc ：', val_each_acc)
+                print('val each acc ：', val_each_acc)
                 plot_confusion_matrix(cm)
                 record_output(val_overall_acc, val_mean_class_acc, val_each_acc, 'records.txt')
 
