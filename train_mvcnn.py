@@ -20,13 +20,13 @@ from models.MVCNN import MVCNN, SVCNN
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-name", "--name", type=str, help="Name of the experiment", default="MVCNN")
-parser.add_argument("-bs", "--batchSize", type=int, help="Batch size for the second stage", default=16) #  8it will be *12 images in each batch for mvcnn  二阶段batchsize
+parser.add_argument("-bs", "--batchSize", type=int, help="Batch size for the second stage", default=4) #  8it will be *12 images in each batch for mvcnn  二阶段batchsize
 parser.add_argument("-num_models", type=int, help="number of models per class", default=1000) # 每一类模型数量///双Titan可设置为14， 双RTX2080可设置为8
 parser.add_argument("-lr", type=float, help="learning rate", default=1e-4)
 parser.add_argument("-weight_decay", type=float, help="weight decay", default=0.0001)  #降低权重
 parser.add_argument("-no_pretraining", dest='no_pretraining', action='store_true')    #预训练
 parser.add_argument("-cnn_name", "--cnn_name", type=str, help="cnn model name", default="res2next50")   #选择cnn模型  默认resnet50
-parser.add_argument("-num_views", type=int, help="number of views", default=3)           #视图数量
+parser.add_argument("-num_views", type=int, help="number of views", default=12)           #视图数量
 parser.add_argument("-train_path", type=str, default='/home/haoran/Projects/data/modelnet40_images_new_12x/*/train')  #训练数据
 parser.add_argument("-val_path", type=str, default="/home/haoran/Projects/data/modelnet40_images_new_12x/*/test")     #验证数据
 parser.set_defaults(train=False)
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     create_folder(log_dir)
 
     # 导入预训练模型，从预训练模型的参数开始优化训练，采用模型为vgg-11和resnet-50
-    cnet = SVCNN(args.name, nclasses=10, pretraining=pretraining, cnn_name=args.cnn_name)
+    cnet = SVCNN(args.name, nclasses=40, pretraining=pretraining, cnn_name=args.cnn_name)
     cnet_ = torch.nn.DataParallel(cnet, device_ids=[0])  # 0.1
     n_models_train = args.num_models * args.num_views
     optimizer = optim.Adam(cnet_.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     create_folder(log_dir)
 
     # cnet_2与cnet采用相同的网络
-    cnet_2 = MVCNN(args.name, cnet, pool_mode='conv2', nclasses=10, cnn_name=args.cnn_name, num_views=args.num_views)
+    cnet_2 = MVCNN(args.name, cnet, pool_mode='max+mean', nclasses=40, cnn_name=args.cnn_name, num_views=args.num_views)
     del cnet
     cnet_2 = torch.nn.DataParallel(cnet_2, device_ids=[0]) # 0,1
     optimizer = optim.Adam(cnet_2.parameters(), lr=args.lr, weight_decay=args.weight_decay, betas=(0.9, 0.999))
@@ -110,6 +110,3 @@ if __name__ == '__main__':
     toc2 = time.clock()
     print('The training time of second stage:%d m' % ((toc2-tic2)/60))
     record_times((toc1-tic1)/60, (toc2-tic2)/60, 'records.txt')
-    
-
-

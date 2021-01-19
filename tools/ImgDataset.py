@@ -14,12 +14,11 @@ import random
 class MultiviewImgDataset(torch.utils.data.Dataset):
     def __init__(self, root_dir, scale_aug=False, rot_aug=False, test_mode=False, \
                  num_models=0, num_views=12, shuffle=True):
-        self.classnames = ['bathtub', 'bed', 'chair', 'desk', 'dresser', 'monitor', 'night_stand', 'sofa', 'table', 'toilet']
-        # self.classnames = ['airplane', 'bathtub', 'bed', 'bench', 'bookshelf', 'bottle', 'bowl', 'car', 'chair',
-        #                    'cone', 'cup', 'curtain', 'desk', 'door', 'dresser', 'flower_pot', 'glass_box',
-        #                    'guitar', 'keyboard', 'lamp', 'laptop', 'mantel', 'monitor', 'night_stand',
-        #                    'person', 'piano', 'plant', 'radio', 'range_hood', 'sink', 'sofa', 'stairs',
-        #                    'stool', 'table', 'tent', 'toilet', 'tv_stand', 'vase', 'wardrobe', 'xbox']
+        self.classnames = ['airplane', 'bathtub', 'bed', 'bench', 'bookshelf', 'bottle', 'bowl', 'car', 'chair',
+                           'cone', 'cup', 'curtain', 'desk', 'door', 'dresser', 'flower_pot', 'glass_box',
+                           'guitar', 'keyboard', 'lamp', 'laptop', 'mantel', 'monitor', 'night_stand',
+                           'person', 'piano', 'plant', 'radio', 'range_hood', 'sink', 'sofa', 'stairs',
+                           'stool', 'table', 'tent', 'toilet', 'tv_stand', 'vase', 'wardrobe', 'xbox']
         self.root_dir = root_dir
         self.scale_aug = scale_aug
         self.rot_aug = rot_aug
@@ -27,9 +26,7 @@ class MultiviewImgDataset(torch.utils.data.Dataset):
         self.num_views = num_views
 
         set_ = root_dir.split('/')[-1]
-        # print(set_)
         parent_dir = root_dir.rsplit('/', 2)[0]
-        # print(parent_dir)
         self.filepaths = []
         for i in range(len(self.classnames)):
             all_files = sorted(glob.glob(parent_dir + '/' + self.classnames[i] + '/' + set_ + '/*.png'))
@@ -98,21 +95,18 @@ class MultiviewImgDataset(torch.utils.data.Dataset):
 
 class SingleImgDataset(torch.utils.data.Dataset):
     def __init__(self, root_dir, scale_aug=False, rot_aug=False, test_mode=False, num_models=0):
-        self.classnames = ['bathtub', 'bed', 'chair', 'desk', 'dresser', 'monitor', 'night_stand', 'sofa', 'table', 'toilet']
-        # self.classnames = ['airplane', 'bathtub', 'bed', 'bench', 'bookshelf', 'bottle', 'bowl', 'car', 'chair',
-        #                    'cone', 'cup', 'curtain', 'desk', 'door', 'dresser', 'flower_pot', 'glass_box',
-        #                    'guitar', 'keyboard', 'lamp', 'laptop', 'mantel', 'monitor', 'night_stand',
-        #                    'person', 'piano', 'plant', 'radio', 'range_hood', 'sink', 'sofa', 'stairs',
-        #                    'stool', 'table', 'tent', 'toilet', 'tv_stand', 'vase', 'wardrobe', 'xbox']
+        self.classnames = ['airplane', 'bathtub', 'bed', 'bench', 'bookshelf', 'bottle', 'bowl', 'car', 'chair',
+                           'cone', 'cup', 'curtain', 'desk', 'door', 'dresser', 'flower_pot', 'glass_box',
+                           'guitar', 'keyboard', 'lamp', 'laptop', 'mantel', 'monitor', 'night_stand',
+                           'person', 'piano', 'plant', 'radio', 'range_hood', 'sink', 'sofa', 'stairs',
+                           'stool', 'table', 'tent', 'toilet', 'tv_stand', 'vase', 'wardrobe', 'xbox']
         self.root_dir = root_dir
         self.scale_aug = scale_aug
         self.rot_aug = rot_aug
         self.test_mode = test_mode
 
         set_ = root_dir.split('/')[-1]
-        # print(set_)
         parent_dir = root_dir.rsplit('/', 2)[0]
-        # print(parent_dir)
         self.filepaths = []
         for i in range(len(self.classnames)):
             all_files = sorted(glob.glob(parent_dir+'/'+self.classnames[i]+'/'+set_+'/*.png'))

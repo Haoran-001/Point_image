@@ -24,10 +24,8 @@ def flip(x, dim): #翻转
 
 
 class SVCNN(Model):
-    def __init__(self, name, nclasses=10, pretraining=True, cnn_name='vgg11'):
+    def __init__(self, name, nclasses=40, pretraining=True, cnn_name='vgg11'):
         super(SVCNN, self).__init__(name)
-
-        # self.classnames = ['bathtub', 'bed', 'chair', 'desk', 'dresser', 'monitor', 'night_stand', 'sofa', 'table', 'toilet']
 
         self.classnames = ['airplane', 'bathtub', 'bed', 'bench', 'bookshelf', 'bottle', 'bowl', 'car', 'chair',
                            'cone', 'cup', 'curtain', 'desk', 'door', 'dresser', 'flower_pot', 'glass_box',
@@ -52,92 +50,20 @@ class SVCNN(Model):
         if self.use_resnet:
             if self.cnn_name == 'resnet18':
                 self.net = models.resnet18(pretrained=self.pretraining)
-                self.net.fc = nn.Linear(512, 10)
+                self.net.fc = nn.Linear(512, 40)
             elif self.cnn_name == 'resnet34':
                 self.net = models.resnet34(pretrained=self.pretraining)
-                self.net.fc = nn.Linear(512, 10)
-            # elif self.cnn_name == 'resnet50':        #原版resnet50
-            #     self.net = models.resnet50(pretrained=self.pretraining)
-            #     self.net.fc = nn.Linear(2048, 40)
-
-            # elif self.cnn_name == 'resnet50':
-            #     self.net = resnet50(pretrained=self.pretraining)
-            #     self.net.fc = nn.Linear(2048, 40)
-            # elif self.cnn_name == 'resnet50x':
-            #     self.net = models.resnext50_32x4d(pretrained=self.pretraining)
-            #     self.net.fc = nn.Linear(2048, 40)
-            # elif self.cnn_name == 'resnet50x':
-            #     self.net = scnet50_v1d(pretrained=self.pretraining)
-            #     self.net.fc = nn.Linear(2048, 40)
-            # elif self.cnn_name == 'resnet101x':
-            #     self.net = models.resnext101_32x8d(pretrained=self.pretraining)
-            #     self.net.fc = nn.Linear(2048, 40)
-            # elif self.cnn_name == 'resnest':
-            #     self.net = models.resnest18(pretrained=self.pretraining)
-            #     self.net.fc = nn.Linear(2048, 40)
-            # elif self.cnn_name == 'resnet101':
-            #     self.net = scnet101(pretrained=self.pretraining)
-            #     self.net.fc = nn.Linear(2048, 40)
-
-        # if self.use_resnest:
-        #     if self.cnn_name == 'resnest50':
-        #         self.net = resnest50(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #     elif self.cnn_name == 'resnest101':
-        #         self.net = resnest101(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-
-        # if self.use_res2net:
-        #     if self.cnn_name == 'res2net50':
-        #         self.net = res2net50(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #     elif self.cnn_name == 'res2net50_26w_4s':
-        #         self.net = res2net50_26w_4s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #     elif self.cnn_name == 'res2net101_26w_4s':
-        #         self.net = res2net101_26w_4s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #     elif self.cnn_name == 'res2net101_26w_4s':
-        #         self.net = res2net101_26w_4s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #     elif self.cnn_name == 'res2net50_26w_6s':
-        #         self.net = res2net50_26w_6s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #     elif self.cnn_name == 'res2net50_26w_8s':
-        #         self.net = res2net50_26w_8s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #     elif self.cnn_name == 'res2net50_48w_2s':
-        #         self.net = res2net50_48w_2s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #     elif self.cnn_name == 'res2net50_14w_8s':
-        #         self.net = res2net50_14w_8s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #
-        # if self.use_res2net_v1b:
-        #     if self.cnn_name == 'res2net50_v1b':
-        #         self.net = res2net50_v1b_26w_4s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #     elif self.cnn_name == 'res2net101_v1b':
-        #         self.net = res2net101_v1b_26w_4s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #
-        # if self.use_dla:
-        #     if self.cnn_name == 'res2net_dla60':
-        #         self.net = res2net50_v1b_26w_4s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
-        #     elif self.cnn_name == 'res2next_dla60':
-        #         self.net = res2net101_v1b_26w_4s(pretrained=self.pretraining)
-        #         self.net.fc = nn.Linear(2048, 40)
+                self.net.fc = nn.Linear(512, 40)
 
         if self.use_res2next:
             if self.cnn_name == 'res2next50':
                 self.net = res2next50(pretrained=self.pretraining)
-                self.net.fc = nn.Linear(2048, 10)
+                self.net.fc = nn.Linear(2048, 40)
 
         elif self.use_densenet:
             if self.cnn_name =='densenet121':
                 self.net = models.densenet121(pretrained=self.pretraining)
-                self.net.classifier = nn.Linear(1024, 10)
+                self.net.classifier = nn.Linear(1024, 40)
         else:
             if self.cnn_name == 'alexnet':
                 self.net_1 = models.alexnet(pretrained=self.pretraining).features
@@ -149,7 +75,7 @@ class SVCNN(Model):
                 self.net_1 = models.vgg16(pretrained=self.pretraining).features
                 self.net_2 = models.vgg16(pretrained=self.pretraining).classifier
 
-            self.net_2._modules['6'] = nn.Linear(4096, 10)
+            self.net_2._modules['6'] = nn.Linear(4096, 40)
 
     def forward(self, x):
         # print(x.size())
@@ -164,10 +90,8 @@ class SVCNN(Model):
 
 
 class MVCNN(Model):
-    def __init__(self, name, model, pool_mode='max', nclasses=10, cnn_name='vgg11', num_views=3):
+    def __init__(self, name, model, pool_mode='max', nclasses=40, cnn_name='vgg11', num_views=3):
         super(MVCNN, self).__init__(name)
-
-        # self.classnames = ['bathtub', 'bed', 'chair', 'desk', 'dresser', 'monitor', 'night_stand', 'sofa', 'table', 'toilet']
 
         self.classnames = ['airplane', 'bathtub', 'bed', 'bench', 'bookshelf', 'bottle', 'bowl', 'car', 'chair',
                            'cone', 'cup', 'curtain', 'desk', 'door', 'dresser', 'flower_pot', 'glass_box',
@@ -197,7 +121,7 @@ class MVCNN(Model):
         elif self.use_densenet:
             self.net_1 = nn.Sequential(*list(model.net.children())[:-1])
             self.pool = nn.AvgPool2d(kernel_size=7, stride=7, padding=0)
-            self.net_2 = nn.Sequential(nn.Linear(1024, 10))
+            self.net_2 = nn.Sequential(nn.Linear(1024, 40))
         else:
             self.net_1 = model.net_1
             self.net_2 = model.net_2
@@ -214,11 +138,11 @@ class MVCNN(Model):
             self.net_2 = nn.Sequential(nn.Linear(2048, 10))
         elif self.pool_mode == 'joint':
             self.jointconv = nn.Conv1d(3, 1, 1, bias=False)
-            self.net_2 = nn.Sequential(nn.Linear(2048, 10))
+            self.net_2 = nn.Sequential(nn.Linear(2048, 40))
         elif self.pool_mode == 'max':
-            self.net_2 = nn.Sequential(nn.Linear(2048, 10))
+            self.net_2 = nn.Sequential(nn.Linear(2048, 40))
         elif self.pool_mode == 'max+mean':
-            self.net_2 = nn.Sequential(nn.Linear(4096, 10))
+            self.net_2 = nn.Sequential(nn.Linear(4096, 40))
 
 
         elif self.pool_mode == 'conv2':  # att+conv
@@ -228,7 +152,7 @@ class MVCNN(Model):
             self.conv2 = nn.Conv2d(1, 1, 1, bias=False)
             self.conv3 = nn.Conv2d(1, 1, 1, bias=False)
             # self.class_conv = nn.Conv1d(2, 2, (2048), padding_mode='valid')   #一维卷积
-            self.net_2 = nn.Sequential(nn.Linear(2048, 10))
+            self.net_2 = nn.Sequential(nn.Linear(2048, 40))
 
     def forward(self, x):
         y = self.net_1(x)
@@ -251,15 +175,11 @@ class MVCNN(Model):
             v = self.conv3(y)
 
             s = torch.matmul(torch.transpose(q, 2, 3), k)
-            # print(s.size())
             beta = torch.nn.functional.softmax(s)
-            # print(beta.size())
             o = torch.matmul(v, beta)
-            # print(o.size())
             gamma = torch.autograd.Variable(torch.FloatTensor([[1.]]), requires_grad=True).cuda()
             y = y + gamma * o
             y = torch.max(y, 3)[0].view(y.shape[0], -1)
-            # print(y.size())
         elif self.pool_mode == 'add':
             y = y.view((int(x.shape[0] / self.num_views), self.num_views, y.shape[-3], y.shape[-2], y.shape[-1]))
             y1 = torch.max(y, 1)[0]
@@ -289,15 +209,11 @@ class MVCNN(Model):
             k = self.conv2(y)
             v = self.conv3(y)
             s = torch.matmul(torch.transpose(q, 2, 3), k)  # q转置*k
-            # print(s.size())    #6, 1, 12, 12
             beta = torch.nn.functional.softmax(s)
-            # print(beta.size())  #6, 1, 12, 12
             o = torch.matmul(v, beta)  # V*s注意力
-            # print(o.size())  #6, 1, 2048, 12
             gamma = torch.autograd.Variable(torch.FloatTensor([[1.]]), requires_grad=True).cuda()
             y = y + gamma * o
             conv_y = self.conv(y)  # 6, 2, 2048, 1
-            # print('conv_y', conv_y.size())
             y = conv_y.view(y.shape[0], -1)
         return self.net_2(y)
 
