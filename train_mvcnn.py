@@ -27,8 +27,8 @@ parser.add_argument("-weight_decay", type=float, help="weight decay", default=0.
 parser.add_argument("-no_pretraining", dest='no_pretraining', action='store_true')    #预训练
 parser.add_argument("-cnn_name", "--cnn_name", type=str, help="cnn model name", default="res2next50")   #选择cnn模型  默认resnet50
 parser.add_argument("-num_views", type=int, help="number of views", default=12)           #视图数量
-parser.add_argument("-train_path", type=str, default='/home/haoran/Projects/data/modelnet40_images_new_12x/*/train')  #训练数据
-parser.add_argument("-val_path", type=str, default="/home/haoran/Projects/data/modelnet40_images_new_12x/*/test")     #验证数据
+parser.add_argument("-train_path", type=str, default=r'C:\Users\haoran\data\modelnet40v2png_ori4\modelnet40v2png_ori4/*/train')  #训练数据
+parser.add_argument("-val_path", type=str, default=r"C:\Users\haoran\data\modelnet40v2png_ori4\modelnet40v2png_ori4/*/test")     #验证数据
 parser.set_defaults(train=False)
 
 
@@ -69,9 +69,9 @@ if __name__ == '__main__':
     print('Loading traning set and val set!')
     # 没有对3D模型转换下的2维图像进行图像增强，如缩放尺寸或者旋转
     train_dataset = SingleImgDataset(args.train_path, scale_aug=False, rot_aug=False, num_models=n_models_train)
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=10)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=4, shuffle=True, num_workers=5)
     val_dataset = SingleImgDataset(args.val_path, scale_aug=False, rot_aug=False, test_mode=True)
-    val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=64, shuffle=False, num_workers=10)
+    val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=4, shuffle=False, num_workers=10)
 
     # 训练集和测试集分别为9843和2468再乖以12
     print('num_train_files: '+str(len(train_dataset.filepaths)))
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     # 这里只是定义一个训练器，记录数据，输出loss和acc, svcnn和num_view=1即只要单个图像输入
     trainer = ModelNetTrainer(cnet_, train_loader, val_loader, optimizer, nn.CrossEntropyLoss(), 'svcnn', log_dir, num_views=1)
     tic1 = time.clock()
-    trainer.train(n_epochs=0) # 测试时设为1，看能否完整跑完两个阶段
+    trainer.train(n_epochs=1) # 测试时设为1，看能否完整跑完两个阶段
     toc1 = time.clock()
     print('The training time of first stage: %d m' % ((toc1-tic1)/60))
 
