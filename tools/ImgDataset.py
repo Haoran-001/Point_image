@@ -80,7 +80,7 @@ class MultiviewImgDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         path = self.filepaths[idx*self.num_views]
-        class_name = path.split('/')[-3]
+        class_name = path.split('/')[-2]
         class_id = self.classnames.index(class_name)
         # Use PIL instead
         imgs = []
