@@ -1,1 +1,0 @@
-{"name": "MVCNN", "batchSize": 4, "num_models": 1000, "lr": 0.0001, "weight_decay": 0.0001, "no_pretraining": false, "cnn_name": "res2next50", "num_views": 12, "train_path": "C:\\Users\\xdtech\\Documents\\modelnet40v2png_ori4\\modelnet40v2png_ori4/*/train", "val_path": "C:\\Users\\xdtech\\Documents\\modelnet40v2png_ori4\\modelnet40v2png_ori4/*/test", "train": false}
