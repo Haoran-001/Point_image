@@ -111,11 +111,14 @@ class MVCNN(Model):
         self.use_dla = cnn_name.startswith('dla')
         self.use_res2next = cnn_name.startswith('res2next')
 
+        self.use_scnet = cnn_name.startswith('SCNet')
+
         self.num_conv = 2
         self.pool_mode = pool_mode
 
         if self.pool_mode not in ['conv', 'attention', 'add', 'joint','max+mean','conv2']:
-            raise ValueError("Pool mode is not right! Please input one of 'conv', 'attention', 'add' or 'max.")
+            # raise ValueError("Pool mode is not right! Please input one of 'conv', 'attention', 'add' or 'max.")
+            pass
 
         if self.use_res2next:
             self.net_1 = nn.Sequential(*list(model.net.children())[:-1])
@@ -124,13 +127,19 @@ class MVCNN(Model):
             self.net_1 = nn.Sequential(*list(model.net.children())[:-1])
             self.pool = nn.AvgPool2d(kernel_size=7, stride=7, padding=0)
             self.net_2 = nn.Sequential(nn.Linear(1024, 40))
+        elif self.use_scnet:
+            self.net_1 = model
+            self.net_1.avgpool = None
+            self.net_1.fc = None
         else:
             self.net_1 = model.net_1
             self.net_2 = model.net_2
 
         if self.pool_mode =='conv':
-            self.conv = nn.Conv2d(1, self.num_conv, (1, num_views), padding_mode='valid')
-            self.class_conv = nn.Conv1d(2, 2, (2048), padding_mode='valid')
+            # self.conv = nn.Conv2d(1, self.num_conv, (1, num_views), padding_mode='valid')
+            self.conv = nn.Conv2d(1, self.num_conv, (1, num_views))
+            # self.class_conv = nn.Conv1d(2, 2, (2048), padding_mode='valid')
+            self.class_conv = nn.Conv1d(2, 2, (2048))
             self.net_2 = nn.Sequential(nn.Linear(2048*self.num_conv, 40))
         elif self.pool_mode == 'attention':
             # attention
